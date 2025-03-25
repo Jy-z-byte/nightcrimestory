@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>London After Dark: Crime Chronicles</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body { 
+            font-family: "Merriweather", serif; 
+            color: white; 
+            background: black; 
+            overflow-x: hidden; 
+        }
+        #map-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+        #map { 
+            width: 100%; 
+            height: 100%; 
+        }
+
+        /* Scrolling Story Sections */
+        #story-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .story-section {
+            position: relative;
+            width: 45%;
+            background: rgba(1, 14, 43, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 60vh;
+            box-shadow: 0 4px 6px rgba(5, 8, 38, 0.1);
+        }
+        .story-section{
+            float: left;
+            clear: left;
+        }
+        
+        .story-image {
+            width: 100%; 
+            border-radius: 8px; 
+            margin-top: 15px;
+            max-height: 300px;
+            object-fit: cover;
+        }
+        .intro-section {
+            width: 100%; 
+            height: 100vh;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            text-align: center; 
+            font-size: 48px; 
+            font-weight: bold;
+            background: rgba(4, 13, 29, 0.8);
+            margin-bottom: 60vh;
+            clear: both;
+        }
+        @media (max-width: 768px) {
+            .story-section {
+                width: 100%;
+                margin-left: 0 !important;
+                float: none;
+            }
+            .intro-section {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+    
+    <div id="story-container">
+        <div class="story-section intro-section">Crime Chronicles Behind Nighttime Prosperity</div>
+    </div>
+    
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiamluZ3lpOCIsImEiOiJjbTZyYmh1bTMwN3YyMmtuMDFpbGJ2NXIzIn0.msR21mXy-ZgMGXktqQYErQ';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v10',
+            center: [-0.1276, 51.5072],
+            zoom: 10
+        });
+
+        const stories = [
+            {
+                title: "Security Guard at Heaven Nightclub Charged with Rape",
+                description: "In November 2024, a security guard at Heaven nightclub was arrested and charged with rape. The venue faced a temporary closure.",
+                image: "story1.jpg",
+                coordinates: [-0.1234, 51.5101]
+            },
+            {
+                title: "Alleged Sexual Assault at The Groucho Club",
+                description: "A 34-year-old man was arrested on suspicion of rape at The Groucho Club in Soho, leading to a temporary suspension of its license.",
+                image: "story2.jpg",
+                coordinates: [-0.1337, 51.5136]
+            },
+            {
+                title: "Car Plows into Crowd in West End",
+                description: "On Christmas morning 2024, a driver mounted the sidewalk and drove into pedestrians near the Sondheim Theater, injuring four people, one critically.",
+                image: "story3.jpg",
+                coordinates: [-0.1281, 51.5115]
+            }
+        ];
+
+        const storyContainer = document.getElementById('story-container');
+        stories.forEach((story, index) => {
+            const section = document.createElement('div');
+            section.className = 'story-section';
+            section.innerHTML = `<h2>${story.title}</h2><p>${story.description}</p><img src="${story.image}" class="story-image">`;
+            storyContainer.appendChild(section);
+
+            new mapboxgl.Marker({ color: 'red' })
+                .setLngLat(story.coordinates)
+                .addTo(map);
+
+                section.addEventListener('mouseenter', () => {
+                map.flyTo({
+                    center: story.coordinates,
+                    zoom: 16,
+                    speed: 1.5,
+                    essential: true
+                });
+            });
+        });
+    </script>
+</body>
+</html>
